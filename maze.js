@@ -37,8 +37,6 @@ const getNeighbors = (x,y) => {
     return neighbors;
 }
 
-let currentPoints = [startingPoint];
-
 const getUniqueArray = (array) => {
     const uniqueArray = [];
         array.forEach(element => {
@@ -49,20 +47,26 @@ const getUniqueArray = (array) => {
     return uniqueArray;
 }
 
-const createRoutes = ()=> {
-    const neighbors = getUniqueArray(currentPoints.map(point => getNeighbors(...point)).flat());
-   
-    if(neighbors.length){
-        neighbors.forEach(neighbor => {     
-            const [x,y] = neighbor;
-            maze[y][x] = counter;
-        }); 
-        counter += 1;
-        currentPoints = neighbors;
-        createRoutes();
-    };
-}
 
-createRoutes();
+const getSteps = (start, end ) => {
+    let currentPoints = [start];
+    const createRoutes = ()=> {
+        const neighbors = getUniqueArray(currentPoints.map(point => getNeighbors(...point)).flat());
+       
+        if(neighbors.length){
+            neighbors.forEach(neighbor => {     
+                const [x,y] = neighbor;
+                maze[y][x] = counter;
+            }); 
+            counter += 1;
+            currentPoints = neighbors;
+            createRoutes();
+        };
+    }
 
-printMaze();
+    createRoutes();
+    printMaze();
+};
+
+getSteps(startingPoint, goal);
+ 
